@@ -5,15 +5,15 @@ const client = await db.connect()
 async function seedTask() {
   await client.sql`
     CREATE TABLE IF NOT EXISTS tasks (
-        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        id INT PRIMARY KEY,
         task VARCHAR(255) NOT NULL,
         complete BOOLEAN NOT NULL
     )
     `
 
   const insertedTask = client.sql`
-        INSERT INTO tasks (task, complete)
-        VALUES ('run', TRUE)
+        INSERT INTO tasks (id, task, complete)
+        VALUES (1, 'run', TRUE)
         `
   return insertedTask
 }
