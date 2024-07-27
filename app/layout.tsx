@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import '@/app/ui/global.css'
 import { gluten } from '@/app/ui/fonts'
 
 export const metadata: Metadata = {
