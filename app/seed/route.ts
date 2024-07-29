@@ -3,17 +3,19 @@ import { db } from '@vercel/postgres'
 const client = await db.connect()
 
 async function seedTask() {
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`
+
   await client.sql`
     CREATE TABLE IF NOT EXISTS tasks (
-        id INT PRIMARY KEY,
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         task VARCHAR(255) NOT NULL,
         complete BOOLEAN NOT NULL
     )
     `
 
   const insertedTask = client.sql`
-        INSERT INTO tasks (id, task, complete)
-        VALUES (1, 'run', TRUE)
+        INSERT INTO tasks (task, complete)
+        VALUES ('run', TRUE)
         `
   return insertedTask
 }

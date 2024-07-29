@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { sql } from '@vercel/postgres'
 import { redirect } from 'next/navigation'
+import { v4 as uuidv4 } from 'uuid'
 
 const FormSchema = z.object({
   id: z.string(),
@@ -10,7 +11,7 @@ const FormSchema = z.object({
   complete: z.boolean(),
 })
 
-const CreateTask = FormSchema.omit({ id: true })
+const CreateTask = FormSchema.omit({ id: true, complete: true })
 
 export type State = {
   errors?: {
@@ -20,24 +21,27 @@ export type State = {
 }
 
 export async function createTask(prevState: State, formData: FormData) {
-  const validateFields = CreateTask.safeParse({
+  const validatedFields = CreateTask.safeParse({
     task: formData.get('task'),
-    complete: formData.get('complete'),
   })
 
-  if (!validateFields.success) {
+  console.log(validatedFields)
+  if (!validatedFields.success) {
     return {
-      errors: validateFields.error.flatten().fieldErrors,
+      errors: validatedFields.error.flatten().fieldErrors,
       message: 'Missing Fields. Failed to Create Task',
     }
   }
 
-  const { task, complete } = validateFields.data
+  const { task } = validatedFields.data
 
+  const id = uuidv4()
+  const complete = `FALSE`
+  console.log(id)
   try {
     await sql`
-    INSERT INTO tasks (task, complete)
-    VALUES (${task}, ${complete})
+    INSERT INTO tasks (id, task, complete)
+    VALUES (${id}, ${task}, ${complete})
     `
   } catch (e) {
     return {
