@@ -6,9 +6,7 @@ import { redirect } from 'next/navigation'
 
 const FormSchema = z.object({
   id: z.string(),
-  task: z
-    .string({ message: 'Please enter a task' })
-    .min(1, { message: 'Task cannot be empty' }),
+  task: z.string().min(1, { message: 'Task cannot be empty.' }),
   complete: z.boolean(),
 })
 

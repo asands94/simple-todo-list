@@ -16,7 +16,7 @@ export function Form() {
       <div id='task-error' aria-live='polite' aria-atomic='true'>
         {state?.errors?.task &&
           state.errors.task.map((error: string) => (
-            <p className='' key={error}>
+            <p className='text-red-500' key={error}>
               {error}
             </p>
           ))}
