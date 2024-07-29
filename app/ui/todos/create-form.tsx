@@ -7,8 +7,6 @@ export function Form() {
   const initialState: State = { message: null, errors: {} }
   const [state, formAction] = useActionState(createTask, initialState)
 
-  console.log('STATE: ', state)
-
   return (
     <form action={formAction}>
       <label htmlFor='task'>Task: </label>
