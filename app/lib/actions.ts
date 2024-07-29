@@ -6,7 +6,9 @@ import { redirect } from 'next/navigation'
 
 const FormSchema = z.object({
   id: z.string(),
-  task: z.string({ message: 'Please enter a task' }),
+  task: z
+    .string({ message: 'Please enter a task' })
+    .min(1, { message: 'Task cannot be empty' }),
   complete: z.boolean(),
 })
 
@@ -24,7 +26,6 @@ export async function createTask(prevState: State, formData: FormData) {
     task: formData.get('task'),
   })
 
-  console.log(validatedFields)
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
