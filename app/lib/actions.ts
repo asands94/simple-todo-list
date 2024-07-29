@@ -1,9 +1,12 @@
+'use server'
+
 import { z } from 'zod'
 import { sql } from '@vercel/postgres'
+import { redirect } from 'next/navigation'
 
 const FormSchema = z.object({
   id: z.string(),
-  task: z.string(),
+  task: z.string({ message: 'Please enter a task' }),
   complete: z.boolean(),
 })
 
@@ -12,8 +15,8 @@ const CreateTask = FormSchema.omit({ id: true })
 export type State = {
   errors?: {
     task?: string[]
-    complete?: boolean[]
   }
+  message?: string | null
 }
 
 export async function createTask(prevState: State, formData: FormData) {
@@ -41,4 +44,5 @@ export async function createTask(prevState: State, formData: FormData) {
       message: `Database Error: Failed to Create Task`,
     }
   }
+  redirect('/')
 }
